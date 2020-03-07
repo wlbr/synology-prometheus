@@ -30,6 +30,6 @@ scrape_configs:
 
   - job_name: 'speedtest'
     scrape_interval: 600s
-    scrape_timeout: 45s
+    scrape_timeout: 59s
     static_configs:
        - targets: ['speedtest-exporter:9112']
