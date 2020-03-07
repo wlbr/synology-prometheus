@@ -3,7 +3,7 @@
 DOCKER_VOLUME="/volume1/docker"
 PROMETHEUS_ROOT="${DOCKER_VOLUME}/prometheus"
 
-folders=( "configs" "data/alertmanager" "data/grafana" "data/prometheus" )
+folders=( "configs" "data/alertmanager" "data/grafana" "data/speedtest" "data/prometheus" )
 for i in "${folders[@]}"; do
   [ ! -d ${PROMETHEUS_ROOT}/${i} ] && mkdir -p ${PROMETHEUS_ROOT}/${i} \
   && echo "folder created ${PROMETHEUS_ROOT}/${i}"
@@ -11,14 +11,15 @@ done
 
 chown -R 65534:65534 ${PROMETHEUS_ROOT}/data/prometheus #nobody userid
 chown -R 472:472 ${PROMETHEUS_ROOT}/data/grafana #grafana userid
+chown -R 65534:65534 ${PROMETHEUS_ROOT}/data/speedtest #grafana userid
 
 configs=( "grafana.ini" "prometheus.yml" )
 for i in "${configs[@]}"; do
-  curl -fsSL https://raw.githubusercontent.com/prahaladramji/synology-prometheus/master/configs/${i} -o ${PROMETHEUS_ROOT}/configs/${i}
+  curl -fsSL https://raw.githubusercontent.com/wlbr/synology-prometheus/master/configs/${i} -o ${PROMETHEUS_ROOT}/configs/${i}
   echo "config created ${PROMETHEUS_ROOT}/configs/${i}"
 done
 
-curl -fsSL https://raw.githubusercontent.com/prahaladramji/synology-prometheus/master/docker-compose.yml \
+curl -fsSL https://raw.githubusercontent.com/wlbr/synology-prometheus/master/docker-compose.yml \
 | sed "s/\${PROMETHEUS_ROOT}/${PROMETHEUS_ROOT//\//\\/}/g" > ${PROMETHEUS_ROOT}/docker-compose.yml
 echo "docker-compose file created ${PROMETHEUS_ROOT}/docker-compose.yml"
 
@@ -29,5 +30,13 @@ echo "
 Grafana       http://`hostname`:3000
 Prometheus    http://`hostname`:9090
 Alertmanager  http://`hostname`:9093
-Node-Exporter http://`hostname`:9100/metrics
+speedtest_eporter http://`hostname`:9112/metrics
 "
+
+#echo "
+#############################################
+#Grafana       http://`hostname`:3000
+#Prometheus    http://`hostname`:9090
+#Alertmanager  http://`hostname`:9093
+#Node-Exporter http://`hostname`:9100/metrics
+#"

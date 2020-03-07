@@ -35,19 +35,29 @@ services:
     volumes:
       - ${PROMETHEUS_ROOT}/data/alertmanager:/alertmanager
 
-  node-exporter:
+  # node-exporter:
+  #   privileged: true
+  #   image: prom/node-exporter
+  #   container_name: node-exporter
+  #   restart: always
+  #   ports:
+  #     - "9100:9100"
+  #   volumes:
+  #     - /proc:/host/proc:ro
+  #     - /sys:/host/sys:ro
+  #     - /:/rootfs:ro
+  #   command:
+  #     - "--path.procfs=/host/proc"
+  #     - "--path.sysfs=/host/sys"
+  #     - "--collector.filesystem.ignored-mount-points"
+  #     - "^/(rootfs/)?(dev|etc|host|proc|run|sys|volume1)($$|/)"
+
+  speedtest-exporter:
     privileged: true
-    image: prom/node-exporter
-    container_name: node-exporter
+    image: tnwhitwell/speedtest_exporter
+    container_name: speedtest_exporter
     restart: always
     ports:
-      - "9100:9100"
-    volumes:
-      - /proc:/host/proc:ro
-      - /sys:/host/sys:ro
-      - /:/rootfs:ro
-    command:
-      - "--path.procfs=/host/proc"
-      - "--path.sysfs=/host/sys"
-      - "--collector.filesystem.ignored-mount-points"
-      - "^/(rootfs/)?(dev|etc|host|proc|run|sys|volume1)($$|/)"
+      - "9112:9112"
+      volumes:
+        - ${PROMETHEUS_ROOT}/data/speedtest:/speedtest
