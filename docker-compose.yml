@@ -19,7 +19,8 @@ services:
     restart: always
     links:
       - alertmanager
-      - node-exporter
+      - speedtest-exporter
+#      - node-exporter
     ports:
       - "9090:9090"
     volumes:
