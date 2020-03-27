@@ -20,6 +20,9 @@ services:
     links:
       - alertmanager
       - speedtest-exporter
+      - fritzbox-exporter
+      - mlab-exporter
+#      - speedtest-exporter
 #      - node-exporter
     ports:
       - "9090:9090"
@@ -53,12 +56,32 @@ services:
   #     - "--collector.filesystem.ignored-mount-points"
   #     - "^/(rootfs/)?(dev|etc|host|proc|run|sys|volume1)($$|/)"
 
-  speedtest-exporter:
+  # speedtest-exporter:
+  #   privileged: true
+  #   image: tnwhitwell/speedtest_exporter
+  #   container_name: speedtest_exporter
+  #   restart: always
+  #   ports:
+  #     - "9112:9112"
+  #   volumes:
+  #     - ${PROMETHEUS_ROOT}/data/speedtest:/speedtest
+  
+  fritzbox-exporter:
     privileged: true
-    image: tnwhitwell/speedtest_exporter
-    container_name: speedtest_exporter
+    image: mxschmitt/fritzbox_exporter
+    container_name: fritzbox_exporter
     restart: always
     ports:
-      - "9112:9112"
+      - "9133:9133"
     volumes:
-      - ${PROMETHEUS_ROOT}/data/speedtest:/speedtest
+      - /volume1/docker/prometheus/data/fritzbox:/fritzbox
+
+  mlab-exporter:
+    privileged: true
+    image: wlbr/mlab-exporter
+    container_name: mlab_exporter
+    restart: always
+    ports:
+      - "9122:9122"
+    volumes:
+      - /volume1/docker/prometheus/data/mlab:/mlab
