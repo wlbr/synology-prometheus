@@ -39,6 +39,26 @@ services:
     volumes:
       - ${PROMETHEUS_ROOT}/data/alertmanager:/alertmanager
 
+  fritzbox-exporter:
+    privileged: true
+    image: mxschmitt/fritzbox_exporter
+    container_name: fritzbox_exporter
+    restart: always
+    ports:
+      - "9133:9133"
+    volumes:
+      - /volume1/docker/prometheus/data/fritzbox:/fritzbox
+
+  mlab-exporter:
+    privileged: true
+    image: wlbr/mlab-exporter
+    container_name: mlab_exporter
+    restart: always
+    ports:
+      - "9122:9122"
+    volumes:
+      - /volume1/docker/prometheus/data/mlab:/mlab
+
   # node-exporter:
   #   privileged: true
   #   image: prom/node-exporter
@@ -66,22 +86,3 @@ services:
   #   volumes:
   #     - ${PROMETHEUS_ROOT}/data/speedtest:/speedtest
   
-  fritzbox-exporter:
-    privileged: true
-    image: mxschmitt/fritzbox_exporter
-    container_name: fritzbox_exporter
-    restart: always
-    ports:
-      - "9133:9133"
-    volumes:
-      - /volume1/docker/prometheus/data/fritzbox:/fritzbox
-
-  mlab-exporter:
-    privileged: true
-    image: wlbr/mlab-exporter
-    container_name: mlab_exporter
-    restart: always
-    ports:
-      - "9122:9122"
-    volumes:
-      - /volume1/docker/prometheus/data/mlab:/mlab
